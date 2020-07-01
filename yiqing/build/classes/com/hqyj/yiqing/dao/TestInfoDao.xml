@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hqyj.yiqing.dao.TestInfoDao">
+<!-- 国外疫情实时统计 -->
+<!-- 查询现存确诊 -->
+<select id="selectCurrentConfirmedCount" resultType="java.lang.Integer">
+	select SUM(currentConfirmedCount)
+	from testinfo where time=CURDATE()
+</select>
+<!-- 查询累计确诊 -->
+<select id="selectConfirmCount" resultType="java.lang.Integer">
+	select SUM(confirmCount)
+	from testinfo where time=CURDATE()
+</select>
+<!-- 查询治愈人数 -->
+<select id="selectCuredCount" resultType="java.lang.Integer">
+	select SUM(curedCount)
+	from testinfo where time=CURDATE()
+</select>
+<!-- 查询死亡人数 -->
+<select id="selectDeadCount" resultType="java.lang.Integer">
+	select SUM(deadCount)
+	from testinfo where time=CURDATE()
+</select>
+<!-- 查询疫情最严重的国家 -->
+<select id="selectWorstCountry" resultType="java.lang.String">
+	select provinceName  from testinfo where time=CURDATE()
+	order by currentConfirmedCount desc limit 1
+</select>
+<!-- 查询疫情最轻的国家 -->
+<select id="selectBestCountry" resultType="java.lang.String">
+	select provinceName  from testinfo where time=CURDATE()
+	order by currentConfirmedCount limit 1
+</select>
+
+<!-- 查询所有国家的疫情数据 -->
+<select id="selectForeignCountYiqing" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	select * from testinfo where time=CURDATE()
+</select>
+
+<!-- 查询所有国家的名称 -->
+<select id="selectForeignPName" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	SELECT * from testinfo where time= CURDATE()
+</select>
+
+<!-- 根据国家名称查询该国的疫情 -->
+<select id="selectForeignYiqingByPName" resultType="com.hqyj.yiqing.pojo.TestInfo" parameterType="java.lang.String">
+	SELECT * from testinfo where time= CURDATE()
+	and provinceName=#{pName}
+</select>
+
+<!-- 查询世界前五国家的确诊信息 -->
+<select id="selectForeignFiveConfrim" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	SELECT * from testinfo where time = CURDATE()
+	ORDER BY currentConfirmedCount desc limit 5
+</select>
+
+<!-- 查询世界前五国家的治愈信息-->
+<select id="selectForeignFiveCured" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	SELECT * from testinfo where time = CURDATE()
+	ORDER BY curedCount desc limit 5
+</select>
+
+<!-- 查询世界前五国家的死亡信息-->
+<select id="selectForeignFiveDead" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	SELECT * from testinfo where time = CURDATE()
+	ORDER BY deadCount desc limit 5
+</select>
+
+<!-- 查询近一周的时间数据-->
+
+
+<!-- 查询近一周内的疫情数据-->
+<select id="selectForeignYiqingInWeeks" resultType="com.hqyj.yiqing.pojo.TestInfo">
+	SELECT SUM(currentConfirmedCount) as currentConfirmedCount,SUM(curedCount) as curedCount,SUM(deadCount) as deadCount,time from testinfo
+	where time >= DATE_SUB(CURDATE(),INTERVAL 7 DAY)
+	group by time
+</select>
+</mapper>

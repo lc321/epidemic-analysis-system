@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hqyj.yiqing.dao.InfoDao">
+<!-- 查询当天的34个省市自治区的肺炎累计确诊人数 -->
+<select id="selectConfirmCountSum" resultType="java.lang.Integer">
+	SELECT  sum(confirmCount) from info 
+where time = CURDATE() and areaName is null;
+</select>
+
+<!-- 查询治愈人数 -->
+<select id="selectCuredCountSum" resultType="java.lang.Integer">
+	SELECT  sum(curedCount) from info 
+where time = CURDATE() and areaName is null;
+</select>
+
+<!-- 查询死亡人数 -->
+<select id="selectDeadCountSum" resultType="java.lang.Integer">
+	SELECT  sum(deadCount) from info 
+where time = CURDATE() and areaName is null;
+</select>
+
+<!-- 查询34个省市自治区的名称 -->
+<select id="selectPname" resultType="com.hqyj.yiqing.pojo.Info">
+	SELECT * from info where time= CURDATE() and areaName is null
+</select>
+
+<!-- 查询34个省市自治区的名称 -->
+<select id="selectyiqingByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where time= CURDATE()
+	and areaName is null and provinceName=#{pName}
+</select>
+
+<!-- 根据省份查询该省的疫情 -->
+<select id="selectCountYiqingByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where time= CURDATE()
+	and areaName is not null and provinceName=#{pName}
+</select>
+
+<!-- 查询各省前五地区的确诊信息 -->
+<select id="selectFiveConfrimByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where provinceName=#{pName} and areaName is not null
+	and time = CURDATE()
+	ORDER BY confirmCount desc limit 5
+</select>
+
+<!-- 查询各省前五地区的治愈信息-->
+<select id="selectFiveCuredByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where provinceName=#{pName} and areaName is not null
+	and time = CURDATE()
+	ORDER BY curedCount desc limit 5
+</select>
+
+<!-- 查询各省前五地区的死亡信息-->
+<select id="selectFiveDeadByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where provinceName=#{pName} and areaName is not null
+	and time = CURDATE()
+	ORDER BY deadCount desc limit 5
+</select>
+</mapper>

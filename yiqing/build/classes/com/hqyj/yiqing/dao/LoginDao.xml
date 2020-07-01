@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hqyj.yiqing.dao.LoginDao">
+<!-- 登录方法的sql  mybatis逆向工程文件-->
+<select id="login" resultType="com.hqyj.yiqing.pojo.UserInfo" parameterType="java.lang.String">
+
+select * from userinfo where userName = #{userName} and userPwd= #{userPwd};
+
+</select>
+
+<!--注册  -->
+<insert id="regedit"  parameterType="java.lang.String">
+insert into userinfo (userName,userPwd) values(#{userName},#{userPwd});
+
+</insert>
+<!--  验证重名-->
+<select id="valReName" resultType="com.hqyj.yiqing.pojo.UserInfo" parameterType="java.lang.String">
+
+select * from userinfo where userName = #{userName};
+
+</select>
+</mapper>
